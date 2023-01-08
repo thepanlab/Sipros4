@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/oscer/software/OpenMPI/3.1.4-GCC-8.3.0/include/",
+                "/opt/oscer/software/gperftools/2.7.90-GCCcore-8.3.0/include/gperftools"
+            ],
+            "defines": [],
+            "compilerPath": "/opt/oscer/software/GCCcore/8.3.0/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "intelliSenseMode": "linux-gcc-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+}

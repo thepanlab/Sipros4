@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "numeric": "cpp",
+        "vector": "cpp",
+        "random.h": "c"
+    }
+}
