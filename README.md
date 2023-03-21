@@ -6,7 +6,7 @@ This repository contains tools for stable isotopic mass spectrometry-based metap
 
 ### Citation
 
-Yi Xiong, Chongle Pan. (2023). Proteomic Stable Isotope Probing with Improved Computational Efficiency and Enrichment Quantification. GitHub. https://github.com/thepanlab/SiprosToolKits
+under review
 
 ### Install environment
 
