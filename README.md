@@ -4,6 +4,10 @@ This repository contains tools for stable isotopic mass spectrometry-based metap
 
 [You can find the simple tutorial for 13C-labeled E. coli on our wiki page](https://github.com/xyz1396/SiprosToolKits/wiki/13C-labeled-E.-coli-SIP-proteomic-search-tutorial)
 
+### Citation
+
+Yi Xiong, Chongle Pan. (2023). Proteomic Stable Isotope Probing with Improved Computational Efficiency and Enrichment Quantification. GitHub. https://github.com/thepanlab/SiprosToolKits
+
 ### Install environment
 
 Raxport relies on .net. Some scripts rely on python2 and R.
