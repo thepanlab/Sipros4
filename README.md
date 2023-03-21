@@ -1,24 +1,18 @@
 ### SiprosToolKits
 
-Tools collection of Sipros for stable isotopic mass spectrum meta proteomic research. Raxport, SiprosV3, SiprosEnsemble and some scripts are in this repository.
+This repository contains tools for stable isotopic mass spectrometry-based metaproteomics research developed by Sipros team. These include Raxport, SiprosV4, SiprosEnsemble and some scripts
 
-### Install environment 
+[You can find the simple tutorial for 13C-labeled E. coli on our wiki page](https://github.com/xyz1396/SiprosToolKits/wiki/13C-labeled-E.-coli-SIP-proteomic-search-tutorial)
+
+### Install environment
+
+Raxport relies on .net. Some scripts rely on python2 and R.
 
 ```bash
 conda create -n py2 scikit-learn python=2.7
 conda create -n mono -c conda-forge mono
 conda create -n r -c conda-forge -c bioconda r-base r-stringr r-tidyr bioconductor-biostrings
 ```
-
-### Make temp folder
-
-```bash
-cd demo
-mkdir fasta raw ft sip configs 
-cd ..
-```
-
-copy all .raw files to raw
 
 ### Convert Raw files
 
@@ -28,62 +22,70 @@ conda activate mono
 mono bin/Raxport.exe -i raw -o ft -j 8
 ```
 
-### Unlabeled search
+### Unlabeled search demo
+
+One-key Script is in [EnsembleScripts](EnsembleScripts/cmd.sh)
+
+Slurm Script is in [EnsembleScripts](EnsembleScripts/UnlabelForSlurm.sb)
 
 ```bash
 # OMP_NUM_THREADS is the threads that you want to limit
 export OMP_NUM_THREADS=10
 # search the scans against the fasta databse, this command will take a long time
-bin/SiprosEnsembleOMP -f demo/ft/demo.FT2 -c configTemplates/SiprosEnsembleConfig.cfg -o demo/sip
+bin/SiprosEnsembleOMP -f demo.FT2 -c configTemplates/SiprosEnsembleConfig.cfg -o sip
 
 conda activate py2
 # convert .Spe2Pep.txt file to .tab file
-EnsembleScripts/sipros_psm_tabulating.py -i demo/sip -c configTemplates/SiprosEnsembleConfig.cfg -o demo/sip
+EnsembleScripts/sipros_psm_tabulating.py -i sip -c configTemplates/SiprosEnsembleConfig.cfg -o sip
 # filter PSMs, output qualified PSMs to .psm.txt file
-EnsembleScripts/sipros_ensemble_filtering.py -i demo.tab configTemplates/SiprosEnsembleConfig.cfg -o demo/sip
+EnsembleScripts/sipros_ensemble_filtering.py -i demo.tab configTemplates/SiprosEnsembleConfig.cfg -o sip
 # assembly protein groups from peptide, output proteins to .pro.txt
-EnsembleScripts/sipros_peptides_assembling.py -c configTemplates/SiprosEnsembleConfig.cfg -w demo/sip
+EnsembleScripts/sipros_peptides_assembling.py -c configTemplates/SiprosEnsembleConfig.cfg -w sip
 
 conda activate r
 # control FDR, output qualified protein groups to .proRefineFDR.txt
-Rscript V3Scripts/refineProteinFDR.R -pro demo.pro.txt -psm demo.psm.txt -fdr 0.005 -o demo
+Rscript V4Scripts/refineProteinFDR.R -pro demo.pro.txt -psm demo.psm.txt -fdr 0.005 -o demo
 # get spectra count of each protein groups, output spectra count to .SPcount.txt
-Rscript V3Scripts/getSpectraCountInEachFT.R -pro dmo.proRefineFDR.txt -psm demo.psm.txt -o demo
+Rscript V4Scripts/getSpectraCountInEachFT.R -pro dmo.proRefineFDR.txt -psm demo.psm.txt -o demo
 ```
-One-key Script is in [EnsembleScripts](EnsembleScripts/cmd.sh)
 
-Slurm Script is in [EnsembleScripts](EnsembleScripts/UnlabelForSlurm.sb)
+### Labeled search demo
 
-### Labeled search
+One-key Script is in [V4Scripts](V4Scripts/SIPcmd.sh)
+
+Slurm Script is in [V4Scripts](V4Scripts/LabelForSlurm.sb)
 
 ```bash
 # generate configs
 mkdir configs raw ft sip fasta
-configGenerator -i SiprosV3Config.cfg -o configs -e C
+configGenerator -i SiprosV4Config.cfg -o configs -e C
 
 conda activate r
 
 # make db of identified proteins by SiprosEnsemble
-Rscript V3Scripts/makeDBforLabelSearch.R \
+Rscript V4Scripts/makeDBforLabelSearch.R \
     -pro YOUR_PATH/*.pro.txt \
     -faa YOUR_PATH/db.fasta \
     -o fasta/db.faa
 
+# search the scans against the fasta database, this command will take a long time
+SiprosV4OMP -f demo.FT2 -c C13_10000Pct.cfg -o sip
+
 conda activate py2
 
 # filter PSMs
-python V3Scripts/sipros_peptides_filtering.py \
-    -c SiprosV3Config.cfg \
+python V4Scripts/sipros_peptides_filtering.py \
+    -c SiprosV4Config.cfg \
     -w sip
 
 # filter proteins
-python V3Scripts/sipros_peptides_assembling.py \
-    -c SiprosV3Config.cfg \
+python V4Scripts/sipros_peptides_assembling.py \
+    -c SiprosV4Config.cfg \
     -w sip
 
 # cluster SIP abundance of protein
-python V3Scripts/ClusterSip.py \
-    -c SiprosV3Config.cfg \
+python V4Scripts/ClusterSip.py \
+    -c SiprosV4Config.cfg \
     -w sip
 
 conda activate r
@@ -103,13 +105,9 @@ Rscript ${binPath}/getLabelPCTinEachFT.R \
     -o sip/YOUR_FILE_NAME
 ```
 
-One-key Script is in [V3Scripts](V3Scripts/SIPcmd.sh)
-
-Slurm Script is in [V3Scripts](V3Scripts/LabelForSlurm.sb)
-
 ### Compile this project
 
-If you want to use mpi version on your server or make the binary suitable for CPU in other architecture, you can compile it by yourself. The source code is in [configGenerator](./configGenerator/), [siprosEnsembleCmakeAll](./siprosEnsembleCmakeAll/), and [siprosV3CmakeAll](./siprosV3CmakeAll/). They are all Cmake project and easy to compile in any IDE.
+If you want to use mpi version on your server or make the binary suitable for CPU in other architecture, you can compile it by yourself. The source code is in [configGenerator](./configGenerator/), [siprosEnsembleCmakeAll](./siprosEnsembleCmakeAll/), and [SiprosV4CmakeAll](./SiprosV4CmakeAll/). They are all Cmake project and easy to compile in any IDE.
 
 
 

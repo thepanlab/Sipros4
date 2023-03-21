@@ -1,0 +1,15 @@
+add_executable(SiprosV4omp ${SRC_LIST} ${PROJECT_SOURCE_DIR}/openmp/main.cpp)
+
+# target_compile_options(SiprosV4omp PUBLIC -ffast-math -march=native)
+target_compile_options(SiprosV4omp PUBLIC -ffast-math)
+
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    target_link_libraries(SiprosV4omp PUBLIC OpenMP::OpenMP_CXX profiler)
+    target_compile_definitions(SiprosV4omp PUBLIC Gper)
+else()
+    # target_link_libraries(SiprosV4omp PUBLIC OpenMP::OpenMP_CXX)
+    target_link_libraries(SiprosV4omp PUBLIC OpenMP::OpenMP_CXX gomp dl -static)
+    if(DEFINED Ticktock)
+        target_compile_definitions(SiprosV4omp PUBLIC Ticktock)
+    endif()
+endif()
