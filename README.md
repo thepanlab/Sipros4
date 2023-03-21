@@ -2,7 +2,7 @@
 
 This repository contains tools for stable isotopic mass spectrometry-based metaproteomics research developed by Sipros team. These include Raxport, SiprosV4, SiprosEnsemble and some scripts
 
-[You can find the simple tutorial for 13C-labeled E. coli on our wiki page](https://github.com/xyz1396/SiprosToolKits/wiki/13C-labeled-E.-coli-SIP-proteomic-search-tutorial)
+[You can find the simple tutorial for 13C-labeled E. coli on our wiki page](https://github.com/thepanlab/SiprosToolKits/wiki/13C-labeled-E.-coli-SIP-proteomic-search-tutorial)
 
 ### Citation
 
