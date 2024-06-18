@@ -25,6 +25,30 @@ void Peptide::setPeptide(const string &sPeptide, const string &sOriginalPeptide,
 	this->cOriginalSuffix = cOriginalSuffix;
 }
 
+void Peptide::calculateExpectedFragmentsSIP(const string &sNewPeptide)
+{
+	ProNovoConfig::configIsotopologue.computeProductIon(sNewPeptide,
+														vvdYionMass, vvdYionProb, vvdBionMass, vvdBionProb);
+	vdBionMasses.clear();
+	vdBionMasses.reserve(sNewPeptide.length());
+	vdYionMasses.clear();
+	vdYionMasses.reserve(sNewPeptide.length());
+
+	for (size_t i = 0; i < vvdYionProb.size(); i++)
+	{
+		// Find the index of the maximum value in vvdYionProb[i]
+		auto maxElement = std::max_element(vvdYionProb[i].begin(), vvdYionProb[i].end());
+		int maxIndex = std::distance(vvdYionProb[i].begin(), maxElement);
+		vdYionMasses.push_back(vvdYionMass[i][maxIndex]);
+	}
+	for (size_t i = 0; i < vvdBionProb.size(); i++)
+	{
+		auto maxElement = std::max_element(vvdBionProb[i].begin(), vvdBionProb[i].end());
+		int maxIndex = std::distance(vvdBionProb[i].begin(), maxElement);
+		vdBionMasses.push_back(vvdBionMass[i][maxIndex]);
+	}
+}
+
 void Peptide::calculateExpectedFragments(const string &sNewPeptide, const map<char, double> &mapResidueMass)
 {
 	int i;
@@ -97,6 +121,8 @@ void Peptide::preprocessing(bool isMS2HighRes, const map<char, double> &mapResid
 		calculateIsotope(sNewPeptide, mapResidueMass); // just for weightsum
 													   // calculateExpectedFragments(mapResidueMass); // just for ranksum
 	}
+	else if (ProNovoConfig::getSearchType() == "SIP")
+		calculateExpectedFragmentsSIP(sNewPeptide);
 	else
 		calculateExpectedFragments(sNewPeptide, mapResidueMass);
 }

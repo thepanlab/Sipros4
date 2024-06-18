@@ -1,4 +1,8 @@
 #!/usr/bin/sh
+
+# sudo apt install openmpi-bin libopenmpi-dev google-perftools libgoogle-perftools-dev
+# in debug console avoid thread switch, -exec set scheduler-locking step
+
 case $1 in
 "load") ;;
 "clean")
@@ -19,13 +23,13 @@ case $1 in
     ;;
 "buildTick")
     cd build
-    cmake -DCMAKE_BUILD_TYPE=Release -DTicktock=Ticktock
+    cmake -DCMAKE_BUILD_TYPE=Release -DTicktock=Ticktock ..
     make -j4
     ;;
 "debug")
     cd build
-    cmake -DCMAKE_BUILD_TYPE=Debug
-    make -j4
+    cmake -DCMAKE_BUILD_TYPE=Debug ..
+    make -j8
     ;;
 "make")
     cd build

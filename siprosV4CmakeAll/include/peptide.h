@@ -73,6 +73,8 @@ public:
     // calculate all expected y and b ions from sPeptide
     void calculateExpectedFragments(const string &sNewPeptide, const map<char, double> &mapResidueMass);
 
+    void calculateExpectedFragmentsSIP(const string &sNewPeptide);
+
     void preprocessing(bool isMS2HighRes, const map<char, double> &mapResidueMass);
 
     // this function doesn't need mapResidueMass as input

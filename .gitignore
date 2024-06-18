@@ -35,3 +35,12 @@
 **/bin/*
 **/build/*
 !bin/*
+
+# for test
+**/timeCompare/*
+
+# for python
+*.pyc
+
+# ignore the .vscode folder only at the top level 
+/.vscode/

@@ -8,12 +8,12 @@
             "name": "g++ - 生成和调试活动文件",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/SiprosV3omp",
+            "program": "${workspaceFolder}/bin/SiprosV4omp",
             "args": [
                 "-c",
-                "SiproConfig.N15_0Pct.cfg",
+                "SiprosV4Config.cfg",
                 "-f",
-                "AMD_DynamicSIP_SampleD_TimePoint0_BRmixed_WC_Velos_OrbiMS2_Run2_020210_09.FT2"
+                "Xu_20140829_15Nplight_D19_Ref3.FT2"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/timeCompare",

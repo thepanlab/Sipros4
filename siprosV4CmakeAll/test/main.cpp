@@ -127,6 +127,49 @@ public:
         cout << "Protein seq: " << sOriginalPeptide << endl;
         cout << "Protein PTM: " << sPeptide << endl;
     }
+    void changeNSIP(double Prob_d)
+    {
+        ProNovoConfig::setFilename("SiprosV4Config.cfg");
+        ProNovoConfig::configIsotopologue.vAtomIsotopicDistribution[3].vProb[0] =
+            1.0 - Prob_d;
+        ProNovoConfig::configIsotopologue.vAtomIsotopicDistribution[3].vProb[1] =
+            Prob_d;
+        map<string, vector<int>>::iterator ResidueIter;
+        IsotopeDistribution tempIsotopeDistribution;
+        for (ResidueIter =
+                 ProNovoConfig::configIsotopologue.mResidueAtomicComposition.begin();
+             ResidueIter !=
+             ProNovoConfig::configIsotopologue.mResidueAtomicComposition.end();
+             ResidueIter++)
+        {
+            if (!ProNovoConfig::configIsotopologue.computeIsotopicDistribution(
+                    ResidueIter->second, tempIsotopeDistribution))
+            {
+                cerr << "ERROR: cannot calculate the isotopic distribution for residue "
+                      << ResidueIter->first << endl;
+            }
+            ProNovoConfig::configIsotopologue
+                .vResidueIsotopicDistribution[ResidueIter->first] =
+                tempIsotopeDistribution;
+        }
+    }
+    void testCalculateExpectedFragmentsSIP(const string &sNewPeptide)
+    {
+        changeNSIP(0.01);
+        cout << "Mass " << endl;
+        calculateExpectedFragmentsSIP(sNewPeptide);
+        for (size_t i = 0; i < vdBionMasses.size(); i++)
+        {
+            cout << setprecision(8) << vdBionMasses[i] << '\t' << endl;
+        }
+        changeNSIP(0.1);
+        cout << "Mass " << endl;
+        calculateExpectedFragmentsSIP(sNewPeptide);
+        for (size_t i = 0; i < vdBionMasses.size(); i++)
+        {
+            cout << setprecision(8) << vdBionMasses[i] << '\t' << endl;
+        }
+    }
 };
 
 class TestProteinDatabase : public ProteinDatabase
@@ -175,6 +218,12 @@ void test_tolerance()
     // }
 }
 
+void testCalculateExpectedFragmentsSIP()
+{
+    TestPeptide p;
+    p.testCalculateExpectedFragmentsSIP("[TGGSNIATGLYGK]");
+}
+
 int main(int argc, char const *argv[])
 {
     // test_loadFT();
@@ -184,6 +233,7 @@ int main(int argc, char const *argv[])
     // test_multiply();
     // test_computeProductIon();
     // test_nextPeptide();
-    test_tolerance();
+    // test_tolerance();
+    testCalculateExpectedFragmentsSIP();
     return 0;
 }
