@@ -6,7 +6,7 @@ This repository contains tools for stable isotopic mass spectrometry-based metap
 
 ### Citation
 
-under review
+Xiong, Yi, Ryan S. Mueller, Shichao Feng, Xuan Guo, and Chongle Pan. "Proteomic stable isotope probing with an upgraded Sipros algorithm for improved identification and quantification of isotopically labeled proteins." Microbiome 12 (2024).
 
 ### Install environment
 
