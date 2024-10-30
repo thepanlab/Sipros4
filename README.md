@@ -8,9 +8,9 @@ This repository contains tools for stable isotopic mass spectrometry-based metap
 
 Xiong, Yi, Ryan S. Mueller, Shichao Feng, Xuan Guo, and Chongle Pan. "Proteomic stable isotope probing with an upgraded Sipros algorithm for improved identification and quantification of isotopically labeled proteins." Microbiome 12 (2024).
 
-### conda version for linux (recommand)
+### install sipros conda environment (recommand)
 
-[conda version](https://anaconda.org/bioconda/sipros)
+[sipros on bioconda](https://anaconda.org/bioconda/sipros)
 
 ```bash
 conda create -n sipros bioconda::sipros
